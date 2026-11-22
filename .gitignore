@@ -1,0 +1,12 @@
+# Datos sensibles: nunca publicar credenciales ni configuraciones reales
+backend/src/main/resources/application.properties
+backend/src/main/resources/application-prod.properties
+backend/target/
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+*.log
+.vscode/
+.idea/
+.DS_Store
