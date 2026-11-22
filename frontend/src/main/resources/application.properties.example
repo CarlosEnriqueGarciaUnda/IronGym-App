@@ -1,0 +1,31 @@
+# Copiar este archivo como application.properties y completar variables.
+server.port=${PORT:8080}
+spring.datasource.url=${DB_URL:jdbc:mysql://localhost:3306/iron_gym?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+spring.datasource.username=${DB_USER:root}
+spring.datasource.password=${DB_PASSWORD}
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.open-in-view=false
+spring.jpa.properties.hibernate.default_batch_fetch_size=32
+spring.jpa.properties.hibernate.jdbc.time_zone=UTC
+spring.flyway.enabled=true
+spring.flyway.locations=classpath:db/migration
+# Generar con openssl rand -base64 48; NO compartir ni subir.
+irongym.jwt.secret-base64=${JWT_SECRET_BASE64}
+irongym.jwt.expiration-minutes=480
+irongym.frontend-url=${FRONTEND_URL:http://localhost:5173}
+# Correo real: configurar Postfix LOCAL en el VPS, SPF y DKIM en DNS
+spring.mail.host=${MAIL_HOST:127.0.0.1}
+spring.mail.port=${MAIL_PORT:25}
+spring.mail.properties.mail.smtp.connectiontimeout=5000
+spring.mail.properties.mail.smtp.timeout=5000
+spring.mail.properties.mail.smtp.writetimeout=5000
+irongym.mail.enabled=${MAIL_ENABLED:false}
+irongym.mail.from=${MAIL_FROM:no-reply@ejemplo.com}
+# Twilio: variables reales fuera de Git y permisos de destinatario
+irongym.twilio.enabled=${TWILIO_ENABLED:false}
+irongym.twilio.account-sid=${TWILIO_ACCOUNT_SID:}
+irongym.twilio.auth-token=${TWILIO_AUTH_TOKEN:}
+irongym.twilio.sms-from=${TWILIO_SMS_FROM:}
+irongym.twilio.whatsapp-from=${TWILIO_WHATSAPP_FROM:}
+logging.level.org.hibernate.SQL=WARN
