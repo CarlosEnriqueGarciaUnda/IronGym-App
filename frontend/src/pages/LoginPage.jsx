@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Dumbbell, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { apiErrorMessage } from '../services/api';
@@ -81,6 +81,7 @@ export default function LoginPage() {
           <h1>Bienvenido de nuevo</h1>
           <p className="subtitle">Accede a tu cuenta para administrar tu gimnasio.</p>
 
+          {location.state?.notice && <div className="ig-success" role="status">{location.state.notice}</div>}
           <form onSubmit={submit} noValidate>
             <FormInput
               id="email"
@@ -120,6 +121,10 @@ export default function LoginPage() {
             </Button>
           </form>
 
+          <div className="ig-auth-links">
+            <Link to="/recuperar">¿Olvidaste tu contraseña?</Link>
+            <span>¿No tienes cuenta? <Link to="/registro">Regístrate como socio</Link></span>
+          </div>
           <p className="auth-help">
             <ShieldCheck size={16} /> Acceso protegido con JWT y roles de usuario.
           </p>
