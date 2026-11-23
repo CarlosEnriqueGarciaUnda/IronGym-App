@@ -5,6 +5,7 @@ import mx.edu.ito.irongym.dto.Views;
 import mx.edu.ito.irongym.service.PlanService;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.*;
 import java.util.*;
