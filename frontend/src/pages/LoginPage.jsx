@@ -3,6 +3,8 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Dumbbell, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { apiErrorMessage } from '../services/api';
+import FormInput from '../components/FormInput';
+import Button from '../components/Button';
 
 function validate(email, password) {
   const errors = {};
@@ -80,49 +82,42 @@ export default function LoginPage() {
           <p className="subtitle">Accede a tu cuenta para administrar tu gimnasio.</p>
 
           <form onSubmit={submit} noValidate>
-            <label htmlFor="email">Correo electrónico</label>
-            <input
+            <FormInput
               id="email"
+              label="Correo electrónico"
               type="email"
               autoComplete="username"
               value={email}
               onChange={(event) => changeEmail(event.target.value)}
               placeholder="correo@ejemplo.com"
-              aria-invalid={Boolean(errors.email)}
-              aria-describedby={errors.email ? 'email-error' : undefined}
+              error={errors.email}
             />
-            {errors.email && <p id="email-error" className="field-error">{errors.email}</p>}
 
-            <label htmlFor="password">Contraseña</label>
-            <div className="password-wrap">
-              <input
-                id="password"
-                type={visible ? 'text' : 'password'}
-                autoComplete="current-password"
-                value={password}
-                onChange={(event) => changePassword(event.target.value)}
-                placeholder="Introduce tu contraseña"
-                aria-invalid={Boolean(errors.password)}
-                aria-describedby={errors.password ? 'password-error' : undefined}
-              />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setVisible((old) => !old)}
-                aria-label={visible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-              >
-                {visible ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-            {errors.password && (
-              <p id="password-error" className="field-error">{errors.password}</p>
-            )}
+            <FormInput
+              id="password"
+              label="Contraseña"
+              type={visible ? 'text' : 'password'}
+              autoComplete="current-password"
+              value={password}
+              onChange={(event) => changePassword(event.target.value)}
+              placeholder="Introduce tu contraseña"
+              error={errors.password}
+              rightAction={(
+                <button
+                  type="button"
+                  onClick={() => setVisible((old) => !old)}
+                  aria-label={visible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                >
+                  {visible ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              )}
+            />
 
             {apiError && <div className="api-error" role="alert">{apiError}</div>}
 
-            <button className="primary-button" type="submit" disabled={submitting}>
+            <Button type="submit" loading={submitting}>
               {submitting ? 'Comprobando credenciales...' : 'Iniciar sesión'}
-            </button>
+            </Button>
           </form>
 
           <p className="auth-help">

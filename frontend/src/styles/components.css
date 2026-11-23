@@ -1,0 +1,129 @@
+/* =========================================
+   IRON GYM / Ticket #6
+   Componentes compartidos por las pantallas.
+   ========================================= */
+
+.ig-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  min-height: 44px;
+  padding: 10px 18px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 750;
+  color: #fff;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.ig-button--primary { background: #fb5b2b; }
+.ig-button--primary:hover:not(:disabled) { background: #ff7144; }
+.ig-button--secondary { background: #393d45; border-color: #50545e; }
+.ig-button--secondary:hover:not(:disabled) { background: #4b505b; }
+.ig-button--danger { background: #b93838; }
+.ig-button--danger:hover:not(:disabled) { background: #d24646; }
+.ig-button--ghost { background: transparent; border-color: #5b606b; }
+.ig-button--ghost:hover:not(:disabled) { background: #2c3037; }
+.ig-button--small { min-height: 37px; padding: 7px 12px; font-size: 12px; }
+.ig-button:disabled { cursor: not-allowed; opacity: 0.55; }
+.ig-button:focus-visible { outline: 3px solid #ffad8f; outline-offset: 2px; }
+
+.ig-spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #ffffff70;
+  border-top-color: #fff;
+  animation: ig-spin 800ms linear infinite;
+}
+@keyframes ig-spin { to { transform: rotate(360deg); } }
+
+.ig-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 19px; }
+.ig-field__label { display: block; font-size: 13px; font-weight: 650; color: #f7f8fa; }
+.ig-field__control { position: relative; display: flex; align-items: center; }
+.ig-field__control input {
+  width: 100%;
+  height: 51px;
+  margin: 0;
+  padding: 0 15px;
+  background: #26292f;
+  border: 1px solid #454954;
+  color: #fff;
+  border-radius: 10px;
+  outline: none;
+}
+.ig-field__control:has(.ig-field__action) input { padding-right: 56px; }
+.ig-field__control input:focus { border-color: #ff7045; box-shadow: 0 0 0 3px #ff704522; }
+.ig-field__control input[aria-invalid='true'] { border-color: #f18585; }
+.ig-field__control input::placeholder { color: #828a97; }
+.ig-field__action { position: absolute; right: 6px; top: 5px; }
+.ig-field__action button { min-width: 40px; min-height: 40px; border: 0; background: transparent; color: #ff7347; }
+.ig-field__hint { color: #b4bac3; font-size: 12px; line-height: 1.5; margin: 0; }
+.ig-field__error { color: #ff9999; font-size: 12px; margin: 0; }
+
+/* Los estilos del Ticket #5 tienen especificidad alta. */
+.auth-content .ig-field { gap: 9px; margin: 6px 0 15px; }
+.auth-content .ig-field__label { margin: 0; }
+.auth-content .ig-field__control input { margin: 0; }
+.auth-content .ig-field .ig-field__error { margin: 0; }
+.auth-content .ig-field__action button { width: 42px; height: 40px; padding: 0; }
+.auth-content .ig-button[type='submit'] { width: 100%; min-height: 52px; margin-top: 8px; }
+
+.ig-navbar { flex-wrap: wrap; }
+.ig-navbar__brand { display: flex; gap: 10px; align-items: center; font-size: 14px; font-weight: 800; }
+.ig-navbar__brand > svg { color: #ff6b3b; }
+.ig-navbar__role { color: #ff9b75; font-size: 11px; padding: 6px 8px; background: #392921; border-radius: 20px; }
+.ig-navbar__identity { min-width: 0; }
+.ig-navbar__identity small { max-width: 260px; overflow-wrap: anywhere; }
+.ig-navbar .ig-button { margin-left: 12px; display: inline-flex; background: #393d45; padding: 8px 13px; }
+
+.ig-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #000b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+.ig-modal { width: min(100%, 490px); background: #25282e; color: #fff; border: 1px solid #434852; border-radius: 16px; padding: 27px; box-shadow: 0 24px 60px #0008; }
+.ig-modal h2 { font-size: 23px; margin: 0 0 14px; }
+.ig-modal p { color: #c4c9d2; line-height: 1.6; font-size: 14px; }
+.ig-modal__actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+
+.ig-table-panel { overflow: hidden; border: 1px solid #343842; border-radius: 13px; background: #1a1d22; }
+.ig-table-scroll { overflow-x: auto; }
+.ig-table { border-collapse: collapse; width: 100%; min-width: 480px; }
+.ig-table caption { text-align: left; font-size: 16px; padding: 18px 20px; font-weight: 700; }
+.ig-table th { background: #292e35; color: #adb5be; text-align: left; font-size: 12px; padding: 13px 18px; }
+.ig-table td { border-top: 1px solid #313640; color: #f5f6f9; font-size: 13px; padding: 15px 18px; }
+.ig-table-empty { text-align: center; color: #c0c6cf !important; padding: 26px !important; }
+.ig-table-error { margin: 15px; padding: 10px; color: #ffb9b9; background: #512724; border-radius: 8px; }
+.ig-table-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 13px 17px; color: #abb2bc; font-size: 12px; flex-wrap: wrap; }
+.ig-table-pages { display: flex; gap: 9px; }
+
+/* Vista de comprobación exclusiva del modo desarrollo */
+.ig-preview { min-height: 100vh; background: #101115; }
+.ig-preview__content { max-width: 1100px; margin: 0 auto; padding: 37px 22px 55px; }
+.ig-preview__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.ig-preview__panel { background: #1c1f25; border: 1px solid #323640; padding: 24px; border-radius: 14px; margin-bottom: 18px; }
+.ig-preview__panel h2 { margin: 0 0 21px; font-size: 21px; }
+.ig-preview__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.ig-preview__info { color: #b7bec8; font-size: 13px; line-height: 1.6; }
+.ig-preview__message { background: #17362a; border: 1px solid #386a54; border-radius: 9px; color: #bcebd4; margin-top: 10px; padding: 12px 16px; }
+.ig-preview__footer { display: flex; align-items: center; gap: 8px; color: #909ba9; font-size: 13px; }
+
+@media (max-width: 760px) {
+  .ig-preview__grid { grid-template-columns: 1fr; }
+  .ig-navbar { padding: 13px 15px; }
+  .ig-navbar__user { width: 100%; justify-content: space-between; }
+  .ig-navbar__identity { flex: 1; }
+  .ig-modal__actions { flex-direction: column-reverse; }
+  .ig-modal__actions .ig-button { width: 100%; }
+  .ig-table-footer { align-items: stretch; flex-direction: column; }
+  .ig-table-pages { justify-content: flex-end; }
+}
