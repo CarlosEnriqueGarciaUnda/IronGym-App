@@ -7,7 +7,7 @@ import PageHeader from '../components/PageHeader';
 
 /** PUT /users/me permite actualizar nombre y teléfono; el correo es fijo. */
 export default function ProfilePage() {
-  const { user } = useAuth();
+  const { user, saveProfile } = useAuth();
   const [form, setForm] = useState({ name: user?.name || '', phone: user?.phone || '' });
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -30,10 +30,7 @@ export default function ProfilePage() {
     if (nameError || phoneError) return;
     setBusy(true); setError(''); setNotice('');
     try {
-      await api.put('/users/me', {
-        name: form.name.trim(), phone: form.phone,
-        email: user.email, active: Boolean(user.active),
-      });
+      await saveProfile(form);
       setNotice('Tus datos se guardaron correctamente.');
     } catch (requestError) {
       setError(apiErrorMessage(requestError));

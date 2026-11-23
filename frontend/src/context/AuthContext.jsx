@@ -61,6 +61,21 @@ export function AuthProvider({ children }) {
     return data.user;
   }
 
+  /**
+   * Actualiza el perfil en Spring Boot y sincroniza la barra de usuario.
+   * El servidor es la fuente de verdad: nunca cambiamos roles desde React.
+   */
+  async function saveProfile(profile) {
+    const { data } = await api.put('/users/me', {
+      name: profile.name.trim(),
+      phone: profile.phone,
+      email: user.email,
+      active: Boolean(user.active),
+    });
+    setUser(data);
+    return data;
+  }
+
   async function logout() {
     try {
       // Spring Boot revoca el token en su tabla de tokens invalidados.
@@ -79,7 +94,7 @@ export function AuthProvider({ children }) {
   }
 
   const value = useMemo(
-    () => ({ user, initializing, login, logout, hasRole }),
+    () => ({ user, initializing, login, logout, hasRole, saveProfile }),
     // Las funciones leen siempre el estado actual del usuario.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [user, initializing],
