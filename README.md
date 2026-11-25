@@ -165,3 +165,19 @@ Puedes ejecutar las pruebas HTTP sin modificar datos desde PowerShell con [scrip
 - Cada integrante mantiene sus commits, issues y evidencias de las pruebas ejecutadas.
 
 *Proyecto académico. Este README describe la implementación y cómo verificarla; no garantiza que todos los servicios externos estén configurados.*
+
+
+## Despliegue en Producción (VPS Azure con HTTPS)
+
+- **URL de producción:** https://irongym-ito-2026.northcentralus.cloudapp.azure.com
+- **Servidor:** Ubuntu Server en Microsoft Azure (`vps-act8-eq17`)
+- **Proxy Inverso y SSL:** Nginx + Certbot (Let's Encrypt)
+  - `/` sirve el compilado estático de React (`dist/` en `/var/www/html`).
+  - `/api/` redirige peticiones hacia el backend Spring Boot en `http://127.0.0.1:8093/api/`.
+- **Backend:** Java 17 / Spring Boot 3 ejecutándose como servicio `systemd` (`irongym.service`) en el puerto `8093`.
+- **Base de Datos:** MySQL 8 (`iron_gym`) con migraciones automáticas gestionadas por Flyway.
+
+### Comandos de mantenimiento en el servidor
+- Reiniciar backend: `sudo systemctl restart irongym`
+- Ver logs en tiempo real: `sudo journalctl -u irongym -f`
+- Recargar Nginx: `sudo nginx -t && sudo systemctl reload nginx`
