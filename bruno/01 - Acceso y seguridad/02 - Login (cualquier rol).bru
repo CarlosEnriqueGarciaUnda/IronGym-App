@@ -1,0 +1,41 @@
+meta {
+  name: 02 - Login (cualquier rol)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "{{loginEmail}}",
+    "password": "{{loginPassword}}"
+  }
+}
+
+script:pre-request {
+  bru.setVar("token", "");
+  bru.setVar("rol", "");
+  bru.setVar("tokenBase", "");
+}
+
+script:post-response {
+  if (res.getStatus() === 200 && res.getBody().token && res.getBody().user) {
+    bru.setVar("token", res.getBody().token);
+    bru.setVar("rol", res.getBody().user.roles.join(","));
+    bru.setVar("tokenBase", bru.getEnvVar("baseUrl"));
+  }
+}
+
+tests {
+  test("HTTP 200", function () { expect(res.getStatus()).to.equal(200); });
+  test("JWT y roles", function () { expect(res.getBody().token).to.be.a("string"); expect(res.getBody().user.roles).to.be.an("array"); });
+}
+
+docs {
+  Usa el mismo Login para ADMIN, SOCIO o ENTRENADOR. Cambia loginEmail y loginPassword en el entorno, o sustituye temporalmente el Body sin guardar. El JWT se captura automaticamente. No hay bloqueo por variables vacias: el servidor valida las credenciales.
+}

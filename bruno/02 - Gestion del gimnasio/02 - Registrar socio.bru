@@ -1,0 +1,51 @@
+meta {
+  name: 02 - Registrar socio
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "{{qaName}}",
+    "email": "{{qaEmail}}",
+    "phone": "",
+    "password": "{{qaPassword}}",
+    "role": "SOCIO"
+  }
+}
+
+script:pre-request {
+  if (bru.getEnvVar("permitirCRUD") !== "SI") { throw new Error("Para una demo autorizada, cambia permitirCRUD a SI en el entorno."); }
+  if (!bru.getVar("token") || bru.getVar("tokenBase") !== bru.getEnvVar("baseUrl") || !String(bru.getVar("rol")).split(",").includes("ADMIN")) { throw new Error("Inicia sesion como ADMIN en este entorno."); }
+  if (bru.getVar("qaUserId") && bru.getVar("qaBase") === bru.getEnvVar("baseUrl")) { throw new Error("Ya existe una demo en esta sesion: termina la limpieza antes de crear otra."); }
+  const tag = String(Date.now()) + String(Math.floor(Math.random()*1000));
+  bru.setVar("qaBase", bru.getEnvVar("baseUrl"));
+  bru.setVar("qaName", "Socio Demo " + tag);
+  bru.setVar("qaEmail", "demo.irongym." + tag + "@example.com");
+  bru.setVar("qaPassword", "Demo!" + tag + "A9");
+  bru.setVar("qaDate", new Date().toISOString().slice(0,10));
+  for (const k of ["qaUserId", "qaMembershipId", "qaPaymentId", "qaAttendanceId"]) bru.setVar(k, "");
+}
+
+script:post-response {
+  if (res.getStatus() === 200 && Number.isInteger(res.getBody().id) && (res.getBody().email === bru.getVar("qaEmail"))) { bru.setVar("qaUserId", String(res.getBody().id)); }
+}
+
+tests {
+  test("HTTP 200", function () { expect(res.getStatus()).to.equal(200); });
+  test("Socio creado", function () { expect(res.getBody().roles).to.include("SOCIO"); expect(res.getBody().id).to.be.a("number"); });
+}
+
+docs {
+  Crea una cuenta QA unica en MySQL real, sin datos personales. Guarda su ID. No uses un socio existente para la demo CRUD.
+}

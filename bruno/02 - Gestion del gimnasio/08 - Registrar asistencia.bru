@@ -1,0 +1,37 @@
+meta {
+  name: 08 - Registrar asistencia
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/api/attendances
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "userId": {{qaUserId}}
+  }
+}
+
+script:pre-request {
+  if (bru.getEnvVar("permitirCRUD") !== "SI") { throw new Error("Para una demo autorizada, cambia permitirCRUD a SI en el entorno."); }
+  if (!bru.getVar("token") || bru.getVar("tokenBase") !== bru.getEnvVar("baseUrl") || !String(bru.getVar("rol")).split(",").includes("ADMIN")) { throw new Error("Inicia sesion como ADMIN en este entorno."); }
+  if (bru.getVar("qaBase") !== bru.getEnvVar("baseUrl")) { throw new Error("Registra primero el socio de prueba en este entorno."); }
+  if (!/^\d+$/.test(String(bru.getVar("qaUserId") || ""))) { throw new Error("Falta qaUserId: ejecuta la creacion correspondiente."); }
+  if (bru.getVar("qaAttendanceId")) { throw new Error("Ya hay una asistencia de esta demo."); }
+}
+
+script:post-response {
+  if (res.getStatus() === 200 && Number.isInteger(res.getBody().id) && (String(res.getBody().userId) === bru.getVar("qaUserId"))) { bru.setVar("qaAttendanceId", String(res.getBody().id)); }
+}
+
+tests {
+  test("HTTP 200", function () { expect(res.getStatus()).to.equal(200); });
+}

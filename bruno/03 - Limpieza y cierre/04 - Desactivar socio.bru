@@ -1,0 +1,35 @@
+meta {
+  name: 04 - Desactivar socio
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/api/users/{{qaUserId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:pre-request {
+  if (bru.getEnvVar("permitirCRUD") !== "SI") { throw new Error("Para una demo autorizada, cambia permitirCRUD a SI en el entorno."); }
+  if (!bru.getVar("token") || bru.getVar("tokenBase") !== bru.getEnvVar("baseUrl") || !String(bru.getVar("rol")).split(",").includes("ADMIN")) { throw new Error("Inicia sesion como ADMIN en este entorno."); }
+  if (bru.getVar("qaBase") !== bru.getEnvVar("baseUrl")) { throw new Error("Registra primero el socio de prueba en este entorno."); }
+  if (!/^\d+$/.test(String(bru.getVar("qaUserId") || ""))) { throw new Error("Falta qaUserId: ejecuta la creacion correspondiente."); }
+  if (bru.getVar("qaAttendanceId") || bru.getVar("qaPaymentId") || bru.getVar("qaMembershipId")) { throw new Error("Limpia primero las asistencias, cobros y mensualidad creados."); }
+}
+
+script:post-response {
+  if (res.getStatus() === 200) { bru.setVar("qaUserId", ""); }
+}
+
+tests {
+  test("HTTP 200", function () { expect(res.getStatus()).to.equal(200); });
+}
+
+docs {
+  Solo actua sobre el ID creado durante la demo. Baja logica, conserva historial.
+}

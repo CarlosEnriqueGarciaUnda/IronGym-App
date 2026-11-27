@@ -1,0 +1,23 @@
+meta {
+  name: 05 - 403 Socio sin permiso
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/users
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("HTTP 403", function () { expect(res.getStatus()).to.equal(403); });
+}
+
+docs {
+  Ejecuta el mismo Login con un SOCIO antes de enviar esta peticion. Despues vuelve a iniciar sesion como ADMIN para el CRUD.
+}
