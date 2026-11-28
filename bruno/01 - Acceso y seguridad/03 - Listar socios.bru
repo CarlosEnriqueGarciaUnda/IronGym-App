@@ -1,0 +1,24 @@
+meta {
+  name: 03 - Listar socios
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/users?role=SOCIO&page=0&size=5
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("HTTP 200", function () { expect(res.getStatus()).to.equal(200); });
+  test("Pagina de socios", function () { expect(res.getBody().content).to.be.an("array"); });
+}
+
+docs {
+  ADMIN o ENTRENADOR.
+}

@@ -1,0 +1,20 @@
+meta {
+  name: 07 - Consultar cobros
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/api/payments?page=0&size=5
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("HTTP 200", function () { expect(res.getStatus()).to.equal(200); });
+  test("Pagina de cobros", function () { expect(res.getBody().content).to.be.an("array"); });
+}

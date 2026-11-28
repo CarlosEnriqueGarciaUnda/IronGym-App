@@ -1,0 +1,16 @@
+meta {
+  name: 01 - Estado API
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/health
+  body: none
+  auth: none
+}
+
+tests {
+  test("HTTP 200", function () { expect(res.getStatus()).to.equal(200); });
+  test("Servicio activo", function () { expect(res.getBody().status).to.equal("UP"); });
+}

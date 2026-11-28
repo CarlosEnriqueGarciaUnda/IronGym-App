@@ -1,0 +1,33 @@
+meta {
+  name: 01 - Listar planes activos
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/plans/options
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  if (res.getStatus() === 200 && Array.isArray(res.getBody())) {
+    const plans = res.getBody();
+    const plan = plans.find(p => p.active && p.name.toLowerCase() === "mensual") || plans.find(p => p.active);
+    bru.setVar("planId", plan ? String(plan.id) : "");
+    bru.setVar("planBase", bru.getEnvVar("baseUrl"));
+  }
+}
+
+tests {
+  test("HTTP 200", function () { expect(res.getStatus()).to.equal(200); });
+  test("Hay un plan activo", function () { expect(res.getBody().some(p => p.active)).to.equal(true); });
+}
+
+docs {
+  Captura automaticamente el ID de un plan activo, preferentemente Mensual. No altera planes existentes.
+}
